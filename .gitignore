@@ -1,3 +1,32 @@
+# dependencies
+node_modules/
+
+# env files (VERY IMPORTANT)
 .env
-/src/generated/prisma
-node_modules
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# build output
+dist/
+build/
+
+# coverage
+coverage/
+
+# IDE
+.vscode/
+.idea/
+
+# misc
+*.tmp
+*.cache
+src/generated/prisma/
+

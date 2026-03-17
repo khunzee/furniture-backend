@@ -4,6 +4,7 @@ import apiRateLimit from "../middleware/rateLimit";
 import morgan from "morgan";
 import secCheck from "../middleware/secCheck";
 import { check } from "../middleware/check";
+import authRoute from "../routes/V1/auth";
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ app
   .use(morgan("dev"))
   .use(express.json())
   .use(express.urlencoded({ extended: true }));
+
+app.use("/api/v1", authRoute);
 
 type RequestWithUserId = Request & { userId?: number };
 
