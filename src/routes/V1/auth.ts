@@ -4,7 +4,7 @@ import {
   login,
   register,
   verifyOtp,
-} from "../../controllers/authContronller";
+} from "../../controllers/authController";
 
 const router = express.Router();
 
