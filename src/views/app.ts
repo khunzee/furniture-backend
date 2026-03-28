@@ -4,6 +4,7 @@ import apiRateLimit from "../middleware/rateLimit";
 import morgan from "morgan";
 import secCheck from "../middleware/secCheck";
 import { check } from "../middleware/check";
+import { errorHandler } from "../middleware/errorHandler";
 import authRoute from "../routes/V1/auth";
 
 dotenv.config();
@@ -27,9 +28,11 @@ app.get("/health", check, (req: RequestWithUserId, res: Response) => {
     userId: req.userId,
   });
 });
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-  const status = error.status || 500;
-  const message = error.message || "sever error";
-  const errorCode = error.code || "Error_code";
-  res.status(status).json({ message, error: errorCode });
+
+// 404 handler
+app.use((req: Request, res: Response) => {
+  res.status(404).json({ message: "Route not found", error: "Error_404" });
 });
+
+// Error handling middleware
+app.use(errorHandler);
