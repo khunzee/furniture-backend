@@ -21,7 +21,7 @@ export const auth = (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const decoded = jwt.verify(
         accessToken,
-        process.env.ACESS_TOKEN_SECRET!,
+        process.env.ACCESS_TOKEN_SECRET!,
       ) as {
         id: number;
       };
@@ -51,7 +51,7 @@ export const auth = (req: CustomRequest, res: Response, next: NextFunction) => {
     // Create new access token
     const newAccessToken = jwt.sign(
       { id: decoded.id },
-      process.env.ACESS_TOKEN_SECRET!,
+      process.env.ACCESS_TOKEN_SECRET!,
       { expiresIn: "15m" },
     );
 

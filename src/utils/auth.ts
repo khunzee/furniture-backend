@@ -1,8 +1,11 @@
+ import { errorCodes } from "../../config/errorCode"
+
+
 export const checkUserExit = (user: any) => {
   if (user) {
     const error: any = new Error("This phone is already exits");
     error.status = 409;
-    error.code = "Already Exit";
+    error.code = errorCodes.userExit;
     throw error;
   }
 };
