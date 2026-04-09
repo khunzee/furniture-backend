@@ -1,11 +1,22 @@
+import { FallbackLng } from "./../../node_modules/i18next/typescript/options.d";
 import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import apiRateLimit from "../middleware/rateLimit";
+import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import secCheck from "../middleware/secCheck";
 import { check } from "../middleware/check";
 import { errorHandler } from "../middleware/errorHandler";
+import { auth } from "../middleware/auth";
 import authRoute from "../routes/V1/auth";
+import adminRoute from "../routes/V1/admin/user";
+import i18next from "i18next";
+import i18nextMiddleware from "i18next-http-middleware";
+import Backend from "i18next-fs-backend";
+import middleware from "i18next-http-middleware";
+import path from "path";
+import profileRoutes from "../routes/V1/api/user";
+import { authorize } from "../middleware/authorize";
 
 dotenv.config();
 
@@ -16,15 +27,47 @@ app
   .use(apiRateLimit)
   .use(morgan("dev"))
   .use(express.json())
-  .use(express.urlencoded({ extended: true }));
+  .use(express.urlencoded({ extended: true }))
+  .use(cookieParser());
+
+i18next
+  .use(Backend) // load translations from files
+  .use(middleware.LanguageDetector) // detect language
+  .init({
+    fallbackLng: "en", // 🔥 fallback language
+
+    preload: ["en", "my"], // preload languages
+
+    ns: ["translation"], // namespace
+    defaultNS: "translation",
+
+    backend: {
+      loadPath: path.join(process.cwd(), "src/locales/{{lng}}/{{ns}}.json"),
+    },
+
+    detection: {
+      order: ["cookie", "header", "querystring"], // priority
+      caches: ["cookie"], // store language in cookie
+      lookupCookie: "lng",
+    },
+
+    interpolation: {
+      escapeValue: false,
+    },
+  });
+
+app.use(middleware.handle(i18next));
+app.use(express.static("public"));
 
 app.use("/api/v1", authRoute);
+app.use("/api/v1/admin", auth,authorize(true, "ADMIN") , adminRoute);
+app.use("/api/v1", profileRoutes);
 
 type RequestWithUserId = Request & { userId?: number };
 
 app.get("/health", check, (req: RequestWithUserId, res: Response) => {
   res.json({
-    message: "Hello we are ready for sending response",
+    message: req.t("welcome"),
     userId: req.userId,
   });
 });

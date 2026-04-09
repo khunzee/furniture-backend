@@ -12,7 +12,15 @@ export const errorHandler = (
   next: NextFunction,
 ) => {
   const status = error.status || 500;
-  const message = error.message || "server error";
+  // 🔥 translate here
+  const message = req.t
+    ? req.t(error.message || "common.serverError")
+    : error.message;
+
   const errorCode = error.code || "Error_code";
-  res.status(status).json({ message, error: errorCode });
+
+  res.status(status).json({
+    message,
+    error: errorCode,
+  });
 };

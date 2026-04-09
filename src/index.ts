@@ -1,4 +1,4 @@
-import { af } from "@faker-js/faker/dist/airline-Dz1uGqgJ";
+
 import {app} from "./views/app"
 
 import "dotenv/config"
