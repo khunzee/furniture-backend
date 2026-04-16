@@ -1,5 +1,4 @@
-import { FallbackLng } from "./../../node_modules/i18next/typescript/options.d";
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import apiRateLimit from "../middleware/rateLimit";
 import cookieParser from "cookie-parser";
@@ -11,12 +10,12 @@ import { auth } from "../middleware/auth";
 import authRoute from "../routes/V1/auth";
 import adminRoute from "../routes/V1/admin/user";
 import i18next from "i18next";
-import i18nextMiddleware from "i18next-http-middleware";
 import Backend from "i18next-fs-backend";
 import middleware from "i18next-http-middleware";
 import path from "path";
-import profileRoutes from "../routes/V1/api/user";
+import userRoutes from "../routes/V1/api/user";
 import { authorize } from "../middleware/authorize";
+
 
 dotenv.config();
 
@@ -58,10 +57,16 @@ i18next
 
 app.use(middleware.handle(i18next));
 app.use(express.static("public"));
+const uploadImagePath = process.env.UPLOAD_IMAGE_PATH || "uploads/images";
+app.use(
+  "/uploads",
+  express.static(path.join(process.cwd(), path.dirname(uploadImagePath))),
+);
 
 app.use("/api/v1", authRoute);
-app.use("/api/v1/admin", auth,authorize(true, "ADMIN") , adminRoute);
-app.use("/api/v1", profileRoutes);
+app.use("/api/v1/admin", auth, authorize(true, "ADMIN"), adminRoute);
+app.use("/api/v1", userRoutes);
+app.use("/api/v1/users", userRoutes);
 
 type RequestWithUserId = Request & { userId?: number };
 

@@ -34,6 +34,7 @@ export const authorize = (permission: boolean, ...roles: string[])=> {
       error.status = 403;
       error.code = "Error_Unauthorized";
       return next(error);
+      
     }
     req.user = user;
     next();

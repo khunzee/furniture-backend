@@ -1,11 +1,9 @@
+import "dotenv/config";
+import { app } from "./views/app";
+import "./jobs/workers/imageOptimizeWorker";
 
-import {app} from "./views/app"
+const port = Number(process.env.PORT) || 4000;
 
-import "dotenv/config"
-
-const PORT = process.env.PORT || 4000;
-
-app.listen(PORT, () => {
-    console.log(`Server is at`)
-} )
-    
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
