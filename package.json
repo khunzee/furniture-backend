@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts",
+    "dev:worker": "nodemon --exec ts-node src/jobs/workers/imageOptimizeWorker.ts",
     "start": "node index.js",
+    "worker:image": "ts-node src/jobs/workers/imageOptimizeWorker.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:migrate": "prisma migrate dev",
     "db:gen": "prisma generate",
@@ -20,6 +22,7 @@
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "bcrypt": "^6.0.0",
+    "bullmq": "^5.73.4",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -31,10 +34,13 @@
     "i18next": "^26.0.3",
     "i18next-fs-backend": "^2.6.3",
     "i18next-http-middleware": "^3.9.2",
+    "ioredis": "^5.10.1",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
+    "multer": "^2.1.1",
     "nodemon": "^3.1.14",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -43,6 +49,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.1.0",
     "@types/node": "^25.5.0",
     "@types/pg": "^8.18.0",
     "prisma": "^7.5.0",
